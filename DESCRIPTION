@@ -2,7 +2,7 @@ Package: xiacf
 Type: Package
 Title: Quantifying Nonlinear Dependence and Lead-Lag Dynamics via
         Chatterjee's Xi
-Version: 0.4.0
+Version: 0.4.1
 Authors@R: person(given = "Yasunori", family = "Watanabe",
                   role = c("aut", "cre"),
                   email = "watanabe.yasunori@outlook.com")
@@ -25,7 +25,7 @@ RoxygenNote: 7.3.3
 Suggests: testthat (>= 3.3.2)
 Config/testthat/edition: 3
 NeedsCompilation: yes
-Packaged: 2026-04-10 18:54:56 UTC; yasunori
+Packaged: 2026-04-27 13:48:53 UTC; yasunori
 Author: Yasunori Watanabe [aut, cre]
 Repository: CRAN
-Date/Publication: 2026-04-16 10:40:02 UTC
+Date/Publication: 2026-04-27 14:00:02 UTC
