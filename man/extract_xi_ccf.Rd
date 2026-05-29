@@ -2,22 +2,27 @@
 % Please edit documentation in R/extract.R
 \name{extract_xi_ccf}
 \alias{extract_xi_ccf}
-\title{Extract Pairwise Xi-CCF from a Multivariate Xi-Matrix}
+\title{Extract Bivariate Xi-CCF from a Multivariate Xi-Matrix}
 \usage{
-extract_xi_ccf(object, var_x, var_y, x_raw = NULL)
+extract_xi_ccf(obj, var_x, var_y, ...)
 }
 \arguments{
-\item{object}{An object of class \code{xi_matrix}.}
+\item{obj}{An object of class \code{xi_matrix}.}
 
-\item{var_x}{Variable X name.}
+\item{var_x}{A character string specifying the lead variable.}
 
-\item{var_y}{Variable Y name.}
+\item{var_y}{A character string specifying the lag variable.}
 
-\item{x_raw}{Optional. The original data to calculate linear CCF.}
+\item{...}{Additional arguments passed to xi_ccf.}
 }
 \value{
 An object of class \code{xi_ccf}.
+#' @note
+This function performs a fresh re-calculation of the surrogate data distribution specifically for the targeted variables.
+As a result, two differences from the original matrix output should be expected:
+1. **FWER Recalibration:** The global threshold will be recalibrated for the bivariate (or univariate) case, typically making it less conservative and restoring statistical power for the specific pathway.
+2. **Monte Carlo Variation:** Due to the randomized nature of surrogate data generation, slight numerical variations in the thresholds and confidence intervals may occur unless a random seed is explicitly set (e.g., `set.seed()`) immediately prior to calling this extraction function.
 }
 \description{
-Extract Pairwise Xi-CCF from a Multivariate Xi-Matrix
+Extract Bivariate Xi-CCF from a Multivariate Xi-Matrix
 }

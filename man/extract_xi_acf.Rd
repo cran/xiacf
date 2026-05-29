@@ -2,20 +2,25 @@
 % Please edit documentation in R/extract.R
 \name{extract_xi_acf}
 \alias{extract_xi_acf}
-\title{Extract Individual Xi-ACF from a Multivariate Xi-Matrix}
+\title{Extract Univariate Xi-ACF from a Multivariate Xi-Matrix}
 \usage{
-extract_xi_acf(object, var, x_raw = NULL)
+extract_xi_acf(obj, var, ...)
 }
 \arguments{
-\item{object}{An object of class \code{xi_matrix}.}
+\item{obj}{An object of class \code{xi_matrix}.}
 
-\item{var}{A character string specifying the variable name.}
+\item{var}{A character string specifying the variable name to extract.}
 
-\item{x_raw}{Optional. The original data to calculate linear ACF.}
+\item{...}{Additional arguments passed to xi_acf.}
 }
 \value{
 An object of class \code{xi_acf}.
+#' @note
+This function performs a fresh re-calculation of the surrogate data distribution specifically for the targeted variables.
+As a result, two differences from the original matrix output should be expected:
+1. **FWER Recalibration:** The global threshold will be recalibrated for the bivariate (or univariate) case, typically making it less conservative and restoring statistical power for the specific pathway.
+2. **Monte Carlo Variation:** Due to the randomized nature of surrogate data generation, slight numerical variations in the thresholds and confidence intervals may occur unless a random seed is explicitly set (e.g., `set.seed()`) immediately prior to calling this extraction function.
 }
 \description{
-Extract Individual Xi-ACF from a Multivariate Xi-Matrix
+Extract Univariate Xi-ACF from a Multivariate Xi-Matrix
 }
