@@ -7,6 +7,7 @@
 #' @param max_lag An integer specifying the maximum lag to compute.
 #' @param n_surr An integer specifying the number of IAAFT surrogate datasets. Default is 399.
 #' @param sig_level A numeric value specifying the significance level (FWER). Default is 0.05.
+#' @param max_iter An integer specifying the maximum iterations for the IAAFT algorithm. Default is 100.
 #' @param n_cores An integer specifying the number of cores for parallel execution.
 #' @param save_dir A character string specifying the directory path to save intermediate results.
 #'
@@ -18,6 +19,7 @@
 #' @importFrom progressr progressor with_progress
 #' @importFrom dplyr bind_rows
 #' @importFrom stats quantile
+#' @importFrom parallelly availableCores
 #' @export
 run_rolling_xi_acf <- function(
     x,
@@ -27,6 +29,7 @@ run_rolling_xi_acf <- function(
     max_lag,
     n_surr = 399,
     sig_level = 0.05,
+    max_iter = 100,
     n_cores = NULL,
     save_dir = NULL
 ) {
@@ -59,7 +62,8 @@ run_rolling_xi_acf <- function(
     num_windows <- length(starts)
 
     if (is.null(n_cores)) {
-        n_cores <- parallel::detectCores() - 1
+        allowed_cores <- parallelly::availableCores()
+        n_cores <- max(1L, allowed_cores - 1L)
     }
     future::plan(future::multisession, workers = n_cores)
     on.exit(future::plan(future::sequential))
@@ -96,7 +100,7 @@ run_rolling_xi_acf <- function(
                     x = as.numeric(x_win),
                     max_lag = as.integer(max_lag),
                     n_surr = as.integer(n_surr),
-                    max_iter = as.integer(100)
+                    max_iter = as.integer(max_iter)
                 )
 
                 global_threshold <- stats::quantile(
