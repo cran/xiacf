@@ -1,3 +1,23 @@
+# xiacf 0.6.5
+
+### 🛡️ Critical Bug Fixes (Parallel HPC Stability)
+* **Resolved Armadillo Subview Memory Race Condition:** Reverted the argument signature of `xi_coefficient()` from constant references (`const arma::vec&`) back to pass-by-value (`arma::vec`). 
+  * *Technical Details:* Passing Armadillo's `subvec()` (which returns a `subview_col`) to a constant vector reference forces Rcpp/Armadillo to implicitly generate a short-lived temporary object. In high-concurrency parallel environments (`future.apply`), the hyper-rapid creation and destruction of these temporaries generated memory race conditions and dangling pointers, leading to instant worker segmentation faults. Pass-by-value now safely enforces thread-isolated copies, ensuring 100% stability under intense parallel simulation loads without performance regression.
+
+### 📝 Documentation & Package Maintenance
+* **Unified Badge Visual Styles:** Replaced native GitHub Actions and Zenodo SVG URLs in `README.Rmd` with unified rendering via `shields.io`. This bypasses GitHub's Camo caching mechanism that frequently broke the Zenodo DOI badge visualization.
+* **Upgraded Development Environment:** Updated `RoxygenNote` in `DESCRIPTION` to version `8.0.0` and fully regenerated all manual (`man/*.Rd`) and namespace entries to clear stale macro warnings during compilation.
+
+# xiacf 0.6.4
+* Fixed a severe memory bottleneck by transforming `xi_coefficient()` arguments into const references, eliminating millions of redundant matrix deep copies during intensive loops.
+* Implemented memory-safe, in-place surrogate generation for univariate IAAFT (`generate_single_iaaft_worker`), preventing OOM-killer crashes in Linux parallel worker environments (`future.apply`).
+* Enhanced `run_rolling_xi_acf` and `run_rolling_xi_ccf` with strict input validation for `time_index` and explicit `warning()` tracking for failed windows.
+* Removed the memory-hazardous `surrogate_miaaft_cpp` C++ backend and replaced it with a safe R-level deprecated wrapper.
+ 
+# xiacf 0.6.3
+* Fixed a critical bug where massive Monte Carlo simulations could cause a segmentation fault (exit code -11) due to floating-point rounding errors in C++.
+* Ensured MIAAFT surrogate generation strictly respects R's global RNG state (e.g., `set.seed()`), enabling bit-for-bit reproducibility in parallel environments.
+
 # xiacf 0.6.2
 
 ## CRAN Policy Compliance
